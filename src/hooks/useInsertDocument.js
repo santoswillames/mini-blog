@@ -34,6 +34,8 @@ export const useInsertDocument = (docCollection) => {
 
   // Função que inseri o Post
   const insertDocument = async (document) => {
+    setCancelled(false);
+
     checkCancelBeforeDispatch({
       type: "LOADING",
     });
@@ -60,11 +62,12 @@ export const useInsertDocument = (docCollection) => {
         payload: error.message,
       });
     }
-    useEffect(() => {
-      //Encerrando o componente
-      return () => setCancelled(true);
-    }, []);
   };
+
+  useEffect(() => {
+    //Encerrando o componente
+    return () => setCancelled(true);
+  }, []);
 
   return {
     insertDocument,
