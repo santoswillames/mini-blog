@@ -6,8 +6,7 @@ import {
   orderBy,
   onSnapshot,
   where,
-  QuerySnapshot,
-} from "firebase/firestore";
+} from "@firebase/firestore";
 
 export const useFetchDocuments = (docCollection, search = null, uid = null) => {
   const [documents, setDocuments] = useState(null);
@@ -28,16 +27,21 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
       try {
         let q;
 
-        //Busca
-        //Dashboard
-
-        //Busca de dados mais simples, pegando todos pela ordem decrecente
-        q = await query(collectionRef, orderBy("createdAt", "desc"));
+        if (search) {
+          q = await query(
+            collectionRef,
+            where("tagsArray", "array-contains", search),
+            orderBy("createdAt", "desc")
+          );
+        } else {
+          //Busca de dados mais simples, pegando todos pela ordem decrecente
+          q = await query(collectionRef, orderBy("createdAt", "desc"));
+        }
 
         //mapear os dados
-        await onSnapshot(q, (QuerySnapshot) => {
+        await onSnapshot(q, (querySnapshot) => {
           setDocuments(
-            QuerySnapshot.docs.map((doc) => ({
+            querySnapshot.docs.map((doc) => ({
               id: doc.id,
               ...doc.data(),
             }))
