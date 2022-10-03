@@ -16,12 +16,13 @@ const Search = () => {
   const search = query.get("q");
 
   const { documents: posts } = useFetchDocuments("posts", search);
+  console.log(posts);
 
   return (
     <div className={styles.search_container}>
       <h2>Search</h2>
       <div>
-        {posts && posts.length === 0 && (
+        {posts === null && (
           <div className={styles.no_posts}>
             <p>Não foram encontrados posts a partir da sua busca...</p>
             <Link to="/" className="btn btn-dark">
